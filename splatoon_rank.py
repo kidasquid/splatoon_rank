@@ -1,4 +1,4 @@
-	#!/usr/bin/env python
+#!/usr/bin/env python
 from random import gauss
 from random import randint
 
@@ -6,14 +6,14 @@ from random import randint
 # 0 = summaries
 # 1 = show players before and after
 # 2 = show individual game results
-debuglevel = 1
+debuglevel = 0
 
 # game stats
-games = 10000 #rounded down to 10s
+rounds = 10000 #rounded down to 10s
 playercount = 100 #players not grouped yet
 
 
-# skill based games are
+# skill based rounds are
 # player skill level of skillspread stdev
 # plus a random number of opponentspread stdev
 # if the sum is more than the average of the two, 10, the player wins
@@ -88,15 +88,15 @@ else:
 print
 print '#################Playing Game#################'
 print
-print '%s Rounds, %s Total Games, Skill Based == %s' % (games/10*10, games/10*10*playercount, skillbased)
+print '%s Rounds, %s Total Games, Skill Based == %s' % (rounds/10*10, rounds/10*10*playercount, skillbased)
 print
 
-games /= 10
+rounds /= 10
 wins = 0
 loses = 0
-for x in range(10*games):
-	if x % games==0:
-		print '%s Percent' % (x/games*10)
+for x in range(10*rounds):
+	if x % rounds==0:
+		print '%s Percent' % (x/rounds*10)
 	for p in players:
 		opponent = gauss(0, opponentspread)
 		if p.skill + opponent >= 0 and skillbased == True:
