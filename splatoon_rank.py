@@ -11,9 +11,11 @@ debuglevel = 0
 progress = False
 
 # game stats
-rounds = 1000 #rounded down to 10s
+rounds = 10000 #rounded down to 10s
 playercount = 10000 #players not grouped yet
 
+# proposed change, where 0 is the rank down point
+proposal = False
 
 # skill based rounds are
 # player skill level of skillspread stdev
@@ -26,9 +28,9 @@ skillbased = False
 skillspread = 2
 opponentspread = 1
 
-# proposed change, where 0 is the rank down point
-proposal = False
 
+
+# grades dictionary
 grades = {
 	0:'C-',
 	1:'C',
@@ -105,7 +107,8 @@ else:
 print
 print '#################Playing Game#################'
 print
-print '%s Rounds, %s Total Games, Skill Based == %s' % (rounds/10*10, rounds/10*10*playercount, skillbased)
+print '%s Rounds, %s Total Games' % (rounds/10*10, rounds/10*10*playercount)
+print 'Skill Based == %s, 0 Point Rank Down == %s' % (skillbased, proposal) 
 if progress == True:
 	print
 
