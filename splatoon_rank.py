@@ -20,9 +20,9 @@ playercount = 100 #players not grouped yet
 # more skilled players win more often
 # opponentspread greather than 1 represents a sample of players of a specific spread
 # rather than whole population of players
-skillbased= True
+skillbased= False
 skillspread = 2
-opponentspread = 2
+opponentspread = 1
 
 grades={
 	0:'C-',
@@ -152,7 +152,6 @@ for p in players:
 	resultsg[p.rank] += 1
 	resultsl[ (p.rank//3) *3 +1 ] += 1
 
-print
 print 'Wins %s' % wins
 print 'Loses %s' % loses
 print
