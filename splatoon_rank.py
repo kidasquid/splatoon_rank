@@ -6,11 +6,13 @@ from random import randint
 # 0 = summaries
 # 1 = show players before and after
 # 2 = show individual game results
+# progress shows percentage, rounded to 10, for runtime
 debuglevel = 0
+progress = False
 
 # game stats
 rounds = 1000 #rounded down to 10s
-playercount = 100 #players not grouped yet
+playercount = 10000 #players not grouped yet
 
 
 # skill based rounds are
@@ -20,9 +22,12 @@ playercount = 100 #players not grouped yet
 # more skilled players win more often
 # opponentspread greather than 1 represents a sample of players of a specific spread
 # rather than whole population of players
-skillbased= False
+skillbased = False
 skillspread = 2
 opponentspread = 1
+
+# proposed change, where 0 is the rank down point
+proposal = False
 
 grades = {
 	0:'C-',
@@ -71,7 +76,7 @@ class player(object):
 			self.grade = grades[self.rank]
 	def lose(self):		
 		self.exp -= 10
-		if self.exp < 0:
+		if ( self.exp <= 0 and proposal == True ) or ( self.exp < 0 and proposal == False ):
 			self.exp = 70
 			self.rank -= 1
 		if self.rank < 0:
@@ -101,13 +106,14 @@ print
 print '#################Playing Game#################'
 print
 print '%s Rounds, %s Total Games, Skill Based == %s' % (rounds/10*10, rounds/10*10*playercount, skillbased)
-print
+if progress == True:
+	print
 
 rounds /= 10
 wins = 0
 loses = 0
 for x in range(10*rounds):
-	if ( x - 1 ) % rounds-1==0:
+	if ( x - 1 ) % rounds-1==0 and progress == True:
 		print '%s Percent Done' % (x/rounds*10)
 	for p in players:
 		opponent = gauss(0, opponentspread)
@@ -163,17 +169,18 @@ for p in players:
 	resultsg[p.rank] += 1
 	resultsl[ (p.rank//3) *3 +1 ] += 1
 
+print
 print 'Wins %s' % wins
 print 'Loses %s' % loses
 print
 print 'Grade Results'
 for x in resultsg:
-	print grades[x], resultsg[x]
+	print grades[x], resultsg[x], round( float(resultsg[x]) / playercount * 100, 0), 'Percent'
 print
 
 print 'Letter Results'
 for x in resultsl:
-	print grades[x], resultsl[x], round( float(resultsl[x]) / playercount * 100, 0)
+	print grades[x], resultsl[x], round( float(resultsl[x]) / playercount * 100, 0), 'Percent'
 
 print
 print '####################Done#####################'
