@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 from random import gauss
-from random import randint
 
 # debug level of output
 # 0 = summaries
@@ -12,7 +11,7 @@ progress = False
 
 # game stats
 rounds = 10000 #rounded down to 10s
-playercount = 10000 #players not grouped yet
+playercount = 1000 #players not grouped yet
 
 # proposed change, where 0 is the rank down point
 proposal = False
@@ -20,7 +19,7 @@ proposal = False
 # skill based rounds are
 # player skill level of skillspread stdev
 # plus a random number of opponentspread stdev
-# if the sum is more than the average of the two, 10, the player wins
+# if the sum is more than the average of the two, 0, the player wins
 # more skilled players win more often
 # opponentspread greather than 1 represents a sample of players of a specific spread
 # rather than whole population of players
@@ -58,7 +57,10 @@ winpoints = {
 class player(object):
 	def __init__(self, player_id):
 		self.id = player_id
-		self.skill = gauss(0, skillspread)
+		if skillbased == True:
+			self.skill = gauss(0, skillspread)
+		else:
+			self.skill = 0
 		self.rank = 0
 		self.exp = 0
 		self.grade = 'C-'
@@ -74,8 +76,8 @@ class player(object):
 		if self.rank > 8:
 			self.exp = 99
 			self.rank = 8
-		else:
-			self.grade = grades[self.rank]
+		self.grade = grades[self.rank]
+
 	def lose(self):		
 		self.exp -= 10
 		if ( self.exp <= 0 and proposal == True ) or ( self.exp < 0 and proposal == False ):
@@ -85,11 +87,10 @@ class player(object):
 			self.rank = 0
 			self.exp = 0
 			self.grade = 'C-'
-		else:
-			self.grade = grades[self.rank]
+		self.grade = grades[self.rank]
 
 
-
+print
 print '#############Initializing Players#############'
 print
 
@@ -120,29 +121,16 @@ for x in range(10*rounds):
 		print '%s Percent Done' % (x/rounds*10)
 	for p in players:
 		opponent = gauss(0, opponentspread)
-		if p.skill + opponent >= 0 and skillbased == True:
+		if p.skill + opponent > 0:
 			p.win()
 			wins += 1
 			if debuglevel >= 2:
 				print p.skill + opponent, 'win'
-		elif p.skill + opponent < 0 and skillbased == True:
+		else:
 			p.lose()
 			loses += 1
 			if debuglevel >= 2:
 				print p.skill + opponent, 'lose'
-
-
-		elif randint(0,1) == 1 and skillbased == False:
-			p.win()
-			wins += 1
-			if debuglevel >= 2:
-				print 'random win'
-		else:
-
-			p.lose()
-			loses += 1
-			if debuglevel >= 2:
-				print 'random lose'
 
 if debuglevel >= 1 :
 	print
