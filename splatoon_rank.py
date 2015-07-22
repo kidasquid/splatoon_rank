@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+	#!/usr/bin/env python
 from random import gauss
 from random import randint
 
@@ -18,6 +18,8 @@ playercount = 100 #players not grouped yet
 # plus a random number of opponentspread stdev
 # if the sum is more than the average of the two, 10, the player wins
 # more skilled players win more often
+# opponentspread greather than 1 represents a sample of players of a specific spread
+# rather than whole population of players
 skillbased= True
 skillspread = 2
 opponentspread = 2
@@ -43,7 +45,7 @@ class player(object):
 		self.grade = 'C-'
 
 	def __repr__(self):
-        	return "Player %s, Skill level %s, Rank %s %s" % (self.id, self.skill, self.grade, self.exp)
+		return "Player %s, Skill level %s, Rank %s %s" % (self.id, self.skill, self.grade, self.exp)
 
 	def win(self, points):
 		self.exp += points
@@ -128,8 +130,8 @@ if debuglevel >= 1 :
 	print '############Post-play Players################'
 	print
 
-	players=sorted(players, key=lambda player: (player.rank, player.exp, player.skill, player.id))	
-	
+	players = sorted( players, key = lambda player: ( player.rank, player.exp, player.skill, player.id ) )	
+
 	for x in players:
 		print x
 
@@ -148,13 +150,12 @@ for x in range(1,9,3):
 
 for p in players:
 	resultsg[p.rank] += 1
-	resultsl[(p.rank//3)*3+1] += 1
+	resultsl[ (p.rank//3) *3 +1 ] += 1
 
 print
 print 'Wins %s' % wins
 print 'Loses %s' % loses
 print
-
 print 'Grade Results'
 for x in resultsg:
 	print grades[x], resultsg[x]
