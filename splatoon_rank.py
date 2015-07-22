@@ -9,7 +9,7 @@ from random import randint
 debuglevel = 0
 
 # game stats
-rounds = 10000 #rounded down to 10s
+rounds = 1000 #rounded down to 10s
 playercount = 100 #players not grouped yet
 
 
@@ -24,7 +24,7 @@ skillbased= False
 skillspread = 2
 opponentspread = 1
 
-grades={
+grades = {
 	0:'C-',
 	1:'C',
 	2:'C+',
@@ -34,6 +34,18 @@ grades={
 	6:'A-',
 	7:'A',
 	8:'A+',
+}
+
+winpoints = {
+	0:20,
+	1:15,
+	2:12,
+	3:12,
+	4:10,
+	5:10,
+	6:10,
+	7:10,
+	8:10,
 }
 
 class player(object):
@@ -47,8 +59,8 @@ class player(object):
 	def __repr__(self):
 		return "Player %s, Skill level %s, Rank %s %s" % (self.id, self.skill, self.grade, self.exp)
 
-	def win(self, points):
-		self.exp += points
+	def win(self):
+		self.exp += winpoints[self.rank]
 		if self.exp >= 100:
 			self.exp = 30
 			self.rank += 1
@@ -57,8 +69,8 @@ class player(object):
 			self.rank = 8
 		else:
 			self.grade = grades[self.rank]
-	def lose(self, points):		
-		self.exp -= points
+	def lose(self):		
+		self.exp -= 10
 		if self.exp < 0:
 			self.exp = 70
 			self.rank -= 1
@@ -95,42 +107,41 @@ rounds /= 10
 wins = 0
 loses = 0
 for x in range(10*rounds):
-	if x % rounds==0:
-		print '%s Percent' % (x/rounds*10)
+	if ( x - 1 ) % rounds-1==0:
+		print '%s Percent Done' % (x/rounds*10)
 	for p in players:
 		opponent = gauss(0, opponentspread)
 		if p.skill + opponent >= 0 and skillbased == True:
-			p.win(10)
+			p.win()
 			wins += 1
 			if debuglevel >= 2:
 				print p.skill + opponent, 'win'
 		elif p.skill + opponent < 0 and skillbased == True:
-			p.lose(10)
+			p.lose()
 			loses += 1
 			if debuglevel >= 2:
 				print p.skill + opponent, 'lose'
 
 
 		elif randint(0,1) == 1 and skillbased == False:
-			p.win(10)
+			p.win()
 			wins += 1
 			if debuglevel >= 2:
 				print 'random win'
 		else:
 
-			p.lose(10)
+			p.lose()
 			loses += 1
 			if debuglevel >= 2:
 				print 'random lose'
-
-print '100 Percent'
 
 if debuglevel >= 1 :
 	print
 	print '############Post-play Players################'
 	print
 
-	players = sorted( players, key = lambda player: ( player.rank, player.exp, player.skill, player.id ) )	
+	players = sorted( players, key = lambda player: 
+			( player.rank, player.exp, player.skill, player.id ) 		)
 
 	for x in players:
 		print x
