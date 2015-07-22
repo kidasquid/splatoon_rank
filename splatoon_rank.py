@@ -2,9 +2,25 @@
 from random import gauss
 from random import randint
 
-debug = False
-games = 100000 #rounded down to 10s
-playercount = 100
+# debug level of output
+# 0 = summaries
+# 1 = show players before and after
+# 2 = show individual game results
+debuglevel = 1
+
+# game stats
+games = 10000 #rounded down to 10s
+playercount = 100 #players not grouped yet
+
+
+# skill based games are
+# player skill level of skillspread stdev
+# plus a random number of opponentspread stdev
+# if the sum is more than the average of the two, 10, the player wins
+# more skilled players win more often
+skillbased= True
+skillspread = 2
+opponentspread = 2
 
 grades={
 	0:'C-',
@@ -21,7 +37,7 @@ grades={
 class player(object):
 	def __init__(self, player_id):
 		self.id = player_id
-		self.skill = gauss(1, 5)
+		self.skill = gauss(0, skillspread)
 		self.rank = 0
 		self.exp = 0
 		self.grade = 'C-'
@@ -60,7 +76,7 @@ players=[]
 for x in range(playercount):
 	players.append( player(x) )
 
-if debug==True:
+if debuglevel >= 1 :
 	for x in players:
 		print x
 else:
@@ -69,23 +85,51 @@ else:
 
 print
 print '#################Playing Game#################'
-print '%s Rounds' % (10*games)
+print
+print '%s Rounds, %s Total Games, Skill Based == %s' % (games/10*10, games/10*10*playercount, skillbased)
 print
 
 games /= 10
+wins = 0
+loses = 0
 for x in range(10*games):
 	if x % games==0:
 		print '%s Percent' % (x/games*10)
 	for p in players:
-		if randint(0,1)==1:
+		opponent = gauss(0, opponentspread)
+		if p.skill + opponent >= 0 and skillbased == True:
 			p.win(10)
-		else:
+			wins += 1
+			if debuglevel >= 2:
+				print p.skill + opponent, 'win'
+		elif p.skill + opponent < 0 and skillbased == True:
 			p.lose(10)
+			loses += 1
+			if debuglevel >= 2:
+				print p.skill + opponent, 'lose'
+
+
+		elif randint(0,1) == 1 and skillbased == False:
+			p.win(10)
+			wins += 1
+			if debuglevel >= 2:
+				print 'random win'
+		else:
+
+			p.lose(10)
+			loses += 1
+			if debuglevel >= 2:
+				print 'random lose'
+
 print '100 Percent'
 
-players=sorted(players, key=lambda player: (player.rank, player.exp, player.id))
+if debuglevel >= 1 :
+	print
+	print '############Post-play Players################'
+	print
 
-if debug==True:
+	players=sorted(players, key=lambda player: (player.rank, player.exp, player.skill, player.id))	
+	
 	for x in players:
 		print x
 
@@ -93,27 +137,33 @@ print
 print '##################Summary####################'
 print
 
-results = {}
-results2 = {}
+resultsg = {}
+resultsl = {}
 
 for x in range(9):
-	results[x]=0
+	resultsg[x]=0
 
 for x in range(1,9,3):
-	results2[x]=0
+	resultsl[x]=0
 
 for p in players:
-	results[p.rank] += 1
-	results2[(p.rank//3)*3+1] += 1
+	resultsg[p.rank] += 1
+	resultsl[(p.rank//3)*3+1] += 1
+
+print
+print 'Wins %s' % wins
+print 'Loses %s' % loses
+print
 
 print 'Grade Results'
-for x in results:
-	print grades[x], results[x]
+for x in resultsg:
+	print grades[x], resultsg[x]
 print
 
 print 'Letter Results'
-for x in results2:
-	print grades[x], results2[x], float(results2[x])/playercount*100
+for x in resultsl:
+	print grades[x], resultsl[x], round( float(resultsl[x]) / playercount * 100, 0)
 
 print
 print '####################Done#####################'
+print
