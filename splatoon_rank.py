@@ -11,7 +11,7 @@ progress = False
 
 # game stats
 rounds = 10000 #rounded down to 10s
-playercount = 1000 #players not grouped yet
+playercount = 10000 #players not grouped yet
 
 # proposed change, where 0 is the rank down point
 proposal = False
