@@ -165,13 +165,15 @@ print 'Wins %s' % wins
 print 'Loses %s' % loses
 print
 print 'Grade Results'
+print 'Letter	Count	Percent'
 for x in resultsg:
-	print grades[x], resultsg[x], round( float(resultsg[x]) / playercount * 100, 0), 'Percent'
+	print '	'.join(map(str,[ grades[x], resultsg[x], round(float(resultsg[x]) / playercount * 100., 1) ]))+'%'
 print
 
-print 'Letter Results'
+print 'Letter Level Results'
+print 'Letter	Count	Percent'
 for x in resultsl:
-	print grades[x], resultsl[x], round( float(resultsl[x]) / playercount * 100, 0), 'Percent'
+	print '	'.join(map(str,[ grades[x], resultsl[x], round(float(resultsl[x]) / playercount * 100., 1) ]))+'%'
 
 print
 print '####################Done#####################'
