@@ -40,9 +40,8 @@ grades = {
 	6:'A-',
 	7:'A',
 	8:'A+',
-	9:'S-',
-	10:'S',
-	11:'S+',}
+	9:'S',
+	10:'S+',}
 
 winpoints = {
 	0:20,
@@ -78,14 +77,14 @@ class player(object):
 		if self.exp >= 100:
 			self.exp = 30
 			self.rank += 1
-		if self.rank > 11:
+		if self.rank == 11:
 			self.exp = 99
-			self.rank = 8
+			self.rank = 10
 		self.grade = grades[self.rank]
 
 	def lose(self, modifier=0):		
 		self.exp -= 10 + modifier
-		if self.exp < 0 or ( self.exp = 0 and proposal == True ):
+		if self.exp < 0 or ( self.exp == 0 and proposal == True ):
 			self.exp = 70
 			self.rank -= 1
 		if self.rank < 0:
@@ -155,11 +154,8 @@ print
 resultsg = {}
 resultsl = {}
 
-for x in range(12):
+for x in range(11):
 	resultsg[x]=0
-
-for x in range(1,12,3):
-	resultsl[x]=0
 
 for p in players:
 	resultsg[p.rank] += 1
@@ -179,6 +175,7 @@ print 'Letter Level Results'
 print 'Letter	Count	Percent'
 for x in sorted(key for (key,value) in resultsl.items()):
 	print '	'.join(map(str,[ grades[x], resultsl[x], round(float(resultsl[x]) / playercount * 100., 2) ]))+'%'
+
 print
 print '####################Done#####################'
 print

@@ -80,7 +80,7 @@ class player(object):
 
 	def lose(self, modifier=0):		
 		self.exp -= 10 + modifier
-		if ( self.exp <= 0 and proposal == True ) or ( self.exp < 0 and proposal == False ):
+		if self.exp < 0 or ( self.exp == 0 and proposal == True ):
 			self.exp = 70
 			self.rank -= 1
 		if self.rank < 0:
@@ -166,13 +166,13 @@ print 'Loses %s' % loses
 print
 print 'Grade Results'
 print 'Letter	Count	Percent'
-for x in resultsg:
+for x in sorted(key for (key,value) in resultsg.items()):
 	print '	'.join(map(str,[ grades[x], resultsg[x], round(float(resultsg[x]) / playercount * 100., 2) ]))+'%'
 print
 
 print 'Letter Level Results'
 print 'Letter	Count	Percent'
-for x in resultsl:
+for x in sorted(key for (key,value) in resultsl.items()):
 	print '	'.join(map(str,[ grades[x], resultsl[x], round(float(resultsl[x]) / playercount * 100., 2) ]))+'%'
 
 print
