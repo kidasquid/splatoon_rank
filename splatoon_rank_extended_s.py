@@ -157,6 +157,9 @@ resultsl = {}
 for x in range(11):
 	resultsg[x]=0
 
+for x in range(1,11,3):
+	resultsl[x]=0
+
 for p in players:
 	resultsg[p.rank] += 1
 	resultsl[ (p.rank//3) *3 +1 ] += 1
