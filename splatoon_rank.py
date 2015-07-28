@@ -68,8 +68,8 @@ class player(object):
 	def __repr__(self):
 		return "Player %s, Skill level %s, Rank %s %s" % (self.id, self.skill, self.grade, self.exp)
 
-	def win(self):
-		self.exp += winpoints[self.rank]
+	def win(self, modifier=0):
+		self.exp += winpoints[self.rank] + modifier
 		if self.exp >= 100:
 			self.exp = 30
 			self.rank += 1
@@ -78,8 +78,8 @@ class player(object):
 			self.rank = 8
 		self.grade = grades[self.rank]
 
-	def lose(self):		
-		self.exp -= 10
+	def lose(self, modifier=0):		
+		self.exp -= 10 + modifier
 		if ( self.exp <= 0 and proposal == True ) or ( self.exp < 0 and proposal == False ):
 			self.exp = 70
 			self.rank -= 1
