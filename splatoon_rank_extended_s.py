@@ -5,12 +5,10 @@ from random import gauss
 # 0 = summaries
 # 1 = show players before and after
 # 2 = show individual game results
-# progress shows percentage, rounded to 10, for runtime
 debuglevel = 0
-progress = False
 
 # game stats
-rounds = 10000 #rounded down to 10s
+rounds = 10000 #games each player plays
 playercount = 10000 #players not grouped yet
 
 # proposed change, where 0 is the rank down point
@@ -42,7 +40,11 @@ grades = {
 	8:'A+',
 	9:'S',
 	10:'S+',}
-
+letters = {
+	1:'C',
+	4:'B',
+	7:'A',
+	10:'S',}
 winpoints = {
 	0:20,
 	1:15,
@@ -53,9 +55,8 @@ winpoints = {
 	6:10,
 	7:10,
 	8:10,
-	9:10,
-	10:10,
-	11:10,
+	9:8,
+	10:8,
 }
 
 class player(object):
@@ -112,17 +113,12 @@ else:
 print
 print '#################Playing Game#################'
 print
-print '%s Rounds, %s Total Games' % (rounds/10*10, rounds/10*10*playercount)
+print '%s Rounds, %s Total Games' % (rounds, rounds*playercount)
 print 'Skill Based == %s, 0 Point Rank Down == %s' % (skillbased, proposal) 
-if progress == True:
-	print
 
-rounds /= 10
 wins = 0
 loses = 0
-for x in range(10*rounds):
-	if ( x - 1 ) % rounds-1==0 and progress == True:
-		print '%s Percent Done' % (x/rounds*10)
+for x in range(rounds):
 	for p in players:
 		opponent = gauss(0, opponentspread)
 		if p.skill + opponent > 0:
@@ -177,7 +173,7 @@ print
 print 'Letter Level Results'
 print 'Letter	Count	Percent'
 for x in sorted(key for (key,value) in resultsl.items()):
-	print '	'.join(map(str,[ grades[x], resultsl[x], round(float(resultsl[x]) / playercount * 100., 2) ]))+'%'
+	print '	'.join(map(str,[ letters[x], resultsl[x], round(float(resultsl[x]) / playercount * 100., 2) ]))+'%'
 
 print
 print '####################Done#####################'
