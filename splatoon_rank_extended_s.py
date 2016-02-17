@@ -56,7 +56,7 @@ winpoints = {
 	7:10,
 	8:10,
 	9:5,
-	10:3,
+	10:4,
 }
 losepoints = {
 	0:-10,
@@ -69,7 +69,7 @@ losepoints = {
 	7:-10,
 	8:-10,
 	9:-5,
-	10:-6,
+	10:-4,
 }
 
 class player(object):
@@ -87,6 +87,11 @@ class player(object):
 		return "Player %s, Skill level %s, Rank %s %s" % (self.id, self.skill, self.grade, self.exp)
 
 	def win(self, modifier=0):
+		if (self.rank == 9 or self.rank == 10) and self.exp >= 40:
+			modifier -= 1
+		if self.rank == 10 and self.exp >= 80:
+			modifier -= 1
+
 		self.exp += winpoints[self.rank] + modifier
 		if self.exp >= 100:
 			self.exp = 30
@@ -97,6 +102,11 @@ class player(object):
 		self.grade = grades[self.rank]
 
 	def lose(self, modifier=0):		
+		if self.rank == 9 and self.exp >= 80:
+			modifier += 1
+		if self.rank == 10 and self.exp >= 40:
+			modifier += 1
+
 		self.exp += (losepoints[self.rank] - modifier)
 		if self.exp < 0 or ( self.exp == 0 and proposal == True ):
 			self.exp = 70
